@@ -638,7 +638,7 @@ vector<int> MaxZigZAg(const vector<int> & sequence)
             
             if(maxLength < maxLocal)
             {
-                maxLength = maxLocal;
+                maxLength = maxLocal;;
                 maxCursor = outerLoop - sequence.cbegin();
             }
         }
@@ -744,6 +744,7 @@ STRINGS DialPad(const wstring& number )
  */
 
 //Rev[i]
+
 size_t MaxRod(const size_t* begin, const size_t* end)
 {
     size_t result = 0;
@@ -931,6 +932,37 @@ std::vector<wstring> JustifyText(const wstring& text, int lineWidth)
  e  0  0  1 2 3 4
  
  */
+/*
+ rod of length L 
+ rod 1 = 5
+ rod  2 = 7
+ rod  3 = 8
+ 
+ 5 
+ 1,4
+ 2,3
+ 3,2
+ 4,1
+ 
+ */
+template <size_t M, size_t N>
+size_t MaxGrid(size_t grid[M][N])
+{
+    size_t solutionGrid[M][N] = grid;
+    
+    for(auto ycursor = N;ycursor;)
+    {
+        --ycursor;
+        for(auto xcursor = M;xcursor;)
+        {
+            --xcursor;
+            size_t right = xcursor + 1 == M ? 0 : grid[xcursor + 1][ycursor];
+            size_t bottom = ycursor + 1 == N ? 0 : grid[xcursor][ycursor +1];
+            solutionGrid[xcursor][ycursor] = std::max(right,bottom) + grid[xcursor][ycursor];
+        }
+    }
+    return solutionGrid[0][0];
+}
 size_t LCS (const wchar_t* lhsbegin,const wchar_t* lhsend,const wchar_t* rhsbegin, const wchar_t* rhsend )
 {
     
@@ -1030,6 +1062,7 @@ size_t LCS (const wchar_t* lhsbegin,const wchar_t* lhsend,const wchar_t* rhsbegi
     return  previousIndices[rhsElems-1];
 #endif
 }
+
 using std::pair;
 pair<size_t,size_t> Stocked(const size_t* begin, const size_t* end)
 {
@@ -1124,7 +1157,7 @@ std::vector<size_t> KnapsackFull(std::vector<std::pair<size_t,size_t>> items,siz
 
     size_t ncapactiy = capacity;
     
-    for(size_t nItem = items.size();/*ncapactiy && */ nItem;--nItem)
+    for(size_t nItem = items.size(); nItem;--nItem)
     {
         //if(costMatrix[ncapactiy][nItem -1].m_keep)
         
@@ -1883,6 +1916,7 @@ void MergeSortHelper(VecIter begin,VecIter end, VecIter aux )
     auto mid = begin + dist;
     
     MergeSortHelper(begin,mid,aux);
+    
     MergeSortHelper(mid,end,aux);
     std::copy(mid,end,aux);
     
@@ -1892,7 +1926,6 @@ vector < int > MergeSort(vector < int > intArr) {
     if(intArr.size() <2 )
     {
         return intArr;
-        
     }
     auto dist = std::distance(intArr.begin(),intArr.end());
     vector < int > aux(dist/2+1);
@@ -1907,4 +1940,39 @@ vector < int > MergeSort(vector < int > intArr) {
   3 4 5 6
    
    */
+
+template <typename T>
+class TNode
+{
+public:
+    TNode(T data):m_data(data)
+    {
+        
+    }
+    void Traverse()
+    {
+        if(m_pLeft)
+            m_pLeft->Traverse();
+        //cout << m_data << endl;
+        if(m_pRight)
+            m_pRight->Traverse();
+    }
+    T m_data;
+    TNode* m_pLeft, * m_pRight;
+};
+
+template <typename T>
+TNode<T>* BuildTree(vector < int >::const_iterator begin, vector < int >::const_iterator end)
+{
+    if(begin == end)
+        return nullptr;
+    auto mid = begin + distance(begin,end)/2;
+    auto root = new TNode<T>(*(mid));
+    root->m_pLeft =  BuildTree<int>(begin,mid);
+    root->m_pRight =  BuildTree<int>(mid+1, end);
+    return root;
+}
+
+
+
 

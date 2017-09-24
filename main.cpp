@@ -45,6 +45,7 @@
 
 #include "IKWorkAea.hpp"
 
+
 constexpr wchar_t NULL_CHAR = L'\0';
 constexpr wchar_t SUFFIX_CHAR = L'$';
 using std::string;
@@ -397,6 +398,7 @@ size_t UpperBound(const T in[],size_t end, T key)
     while(begin != end)
     {
         size_t mid = begin + (end - begin)/2;
+        
         
         if(mid == begin)
             break;
@@ -782,7 +784,7 @@ public:
     void Insert(const T & key)
     {
         C less;
-        m_queue[++m_nIndex] = key;        //index 0 is sentinel , items are ine based, please note
+        m_queue[++m_nIndex] = key;        //index 0 is sentinel , items are one based, please note
         size_t index = m_nIndex;
         while(index >1 && less(m_queue[index],m_queue[index/2]))
         {
@@ -1515,7 +1517,7 @@ pair<FwdIter,FwdIter> MonoTonic(FwdIter first, FwdIter last)
  size_t KIndex[] = {10,9,8,7,6,5,4,3,2,1,0};
  
  
-/*
+
  auto list = {3,2,0,1};
 for( auto idx : list)
  {
@@ -1753,11 +1755,211 @@ using RelDeleter = decltype(RelOnDel<T>);
 
 STRINGS DialPad(const wstring& number );
 vector < int > MergeSort(vector < int > intArr);
-
+int findMinimum(vector < int > arr);
 #include <array>
+
+void RLE(string input);
+int getMaxArea(int hist[], int n);
+string moveLetters(string input);
+void PartitonInplace(std::vector<int>& input);
+vector<size_t> MaxAreaHistogram(vector<size_t>& bars);
+void StablePart(std::vector<int>& input);
+
+size_t WaterinBar(vector<size_t> bars);
+size_t NapSak(vector<pair<size_t,size_t>> items, size_t Cap);
+template<typename T>
+class Link
+{
+public:
+    Link(const T & data):m_data(data),m_pNext(nullptr)
+    {}
+//private:
+    T m_data;
+    Link<T>* m_pNext;
+};
+//a->b->c
+
+template<typename T>
+Link<T>* Reverse(Link<T>* link,Link<T>*& head )
+{
+
+    if(link == nullptr)
+        return link;
+    
+    {
+        auto next = link->m_pNext;
+        link->m_pNext = nullptr;
+        while(next)
+        {
+            auto cursor = next->m_pNext;
+            next->m_pNext = link;
+            link = next;
+            next = cursor;
+        }
+    }
+    
+    auto prefix = Reverse(link->m_pNext,head);
+    if(prefix)
+    {
+        link->m_pNext = prefix->m_pNext;
+        prefix->m_pNext = link;
+    }
+    else
+    {   head = link;
+    }
+    return link;
+    
+}
+
+template <typename RandIter>
+RandIter LowerBound(RandIter begin, RandIter end, const typename iterator_traits<RandIter>::value_type& val)
+{
+    while (begin!= end)
+    {
+        auto mid = begin + (end - begin)/2;
+        if( *mid < val)
+        {
+            begin = mid +1;
+        }
+        else
+            end = mid;
+    }
+    
+    return begin;
+}
+
+template <typename RandIter, typename Pred>
+RandIter Bound(RandIter begin, RandIter end, Pred predicate)
+{
+    while (begin!= end)
+    {
+        auto mid = begin + (end - begin)/2;
+        if(! predicate(*mid))
+        {
+            begin = mid +1;
+        }
+        else
+            end = mid;
+    }
+    
+    return begin;
+}
+
+pair<Operation,int> ParseOperation(string& op);
+void superStack(vector < string > operations);
+void GoSpiral(const vector<vector<size_t>>& grid );
+void DetectIntersection();
+bool IsRotatedPalindrome(string input);
+void Permuda(string& input);
+void SSet(string&);
+void ParaSynthesize(size_t open, size_t close);
+void InsertS(IntIter begin, IntIter end);
+void NChooseK(const wstring& in, size_t k);
+void Find(wstring& strText, wstring& strPat);
+void Test();
+size_t LCSLite(const wchar_t* lbegin, const wchar_t* lend, const wchar_t* rbegin, const wchar_t* rend);
 int main(int argc, const char * argv[])
 
 {
+    JustifyText(text,57);
+    wstring strText = L"  Hello World Hello";
+    wstring pattern = L"Hello";
+    auto lcs = LCSLite(strText.c_str(), strText.c_str() + strText.size(), pattern.c_str(),pattern.c_str() + pattern.size());
+    
+    Test();
+    
+    Find(strText,pattern);
+    vector<size_t> binsort {0,1,2,3,4};
+    NChooseK(L"123", 3);
+    auto lwrBound = [](size_t elem) ->bool
+    {
+        return !(elem < 2);
+    };
+    auto lbu = Bound(binsort.begin(), binsort.end(),lwrBound);
+    
+    vector<int> srt= {6,7};
+    InsertS(srt.begin(),srt.end());
+    //vector
+    size_t array1[]= {0,3,2,9,4,7,8,1,6};
+    //InsertS(array1,array1 + sizeof(array1)/sizeof(array1[0]));
+    
+    std::sort(array1, array1 + sizeof(array1)/sizeof(array1[0]));
+    auto myTree = BuildTreebalanced<size_t,size_t*>(array1,array1 + sizeof(array1)/sizeof(array1[0]));
+    
+    {
+        //ParaSynthesize(4,4);
+        //string p("1221");
+        //Permuda(p);
+        //SSet(p);
+        //auto pali = IsRotatedPalindrome("hjijhgi");
+        DetectIntersection();
+        auto firstList = nullptr;
+        for(int i = 0; i!= 5; i++)
+        {
+        }
+        vector<vector<size_t>> spiral =
+        {
+            {0,1,2},
+            {3,4,5},
+            {6,7,8},
+            {9,10,11}
+        };
+        GoSpiral(spiral);
+        
+        vector<string> inputops{
+            {"push -36"},
+            {"push 20"},
+            {"pop "},
+            {"push -9"},
+            {"pop "},
+            {"push -53"},
+            {"pop "},
+            {"inc 1 -17"}
+            };
+        superStack(inputops);
+        
+        
+        Link<int>* head = new Link<int>(5);
+        head->m_pNext = new Link<int>(4);
+        head->m_pNext->m_pNext =new Link<int>(3);
+        Link<int>* rev;
+        Reverse(head,rev);
+        
+        vector<pair<size_t,size_t>> items =
+        {{20,65},{8,35},{60,245},{55,195},{40,65},{70,150},{85,275},{25,155},
+            {30,120},{65,320},{75,75},{10,40},{95,200},{50,100},{40,220},{10,99}
+        };
+        NapSak(items, 130);
+        
+
+        
+        vector<int> fb = {2,3,-4,-9,-1,-7,1,-5,-6};
+        StablePart(fb);
+        vector<size_t> bars ={6,2,5,4,6,5,6};
+        auto water = WaterinBar(bars);
+        MaxAreaHistogram(bars);
+        string letter = "111xyz";
+        auto moved =moveLetters(letter);
+        
+        auto maxsub =  MaxSubVector(fb);
+        vector<int> sub(maxsub.first,maxsub.second);
+        
+
+        RLE("aaabcccd");
+        vector<int> inorder {2, 2, 2, 2, 2, 2, 2, 2, 0,2,2,2};
+        auto res =  findMinimum(inorder);
+        vector<int> preorder {50,30,10,40,70,60,90};
+        //20,65;8,35;60,245;55,195;40,65;70,150;85,275;25,155
+        //30,120;65,320;75,75;10,40;95,200;50,100;40,220;10,99
+        
+        
+    }
+    
+    {
+        //vector<string> parans =  GenerateNestedBrackets(4);
+        GenerateParanthesis(3);
+        
+    }
     {
         vector<int> ip{4,2,3,4,5,6,0};
        // FindMissing(ip,3);
@@ -1818,7 +2020,7 @@ int main(int argc, const char * argv[])
                                       
     
     
-    JustifyText(text,57);
+    
     size_t rods[]= {0,3,5,10,12,14};
     auto mm = MaxMin(rods,sizeof(rods)/sizeof(rods[0]));
     
@@ -1867,10 +2069,7 @@ int main(int argc, const char * argv[])
     int array[] = {1,1,5,5,5,5,5,5,6,6,6,6,8,9,10,12};
     size_t pivot = QSelect(array, 1, -1);
 
-    size_t array1[]= {0,3,2,9,4,7};
-    std::sort(array1, array1 + sizeof(array1)/sizeof(array1[0]));
-    auto myTree = BuildTreebalanced<size_t,size_t*>(array1,array1 + sizeof(array1)/sizeof(array1[0]));
-
+    
     //LevelWalk(myTree);
     {
         vector<size_t> inorder;
@@ -2067,6 +2266,8 @@ public:
 private:
     T m_data;
 };
+
+
 /*
    0,1,2,3,4,5,6,7,8,9
  0 0,1,2,3,4,5,6,7,8,9
@@ -2216,3 +2417,101 @@ TXNode<T> * DeleteNode(TXNode<T> * root, T data)
     }
     return root;
 }
+
+/*
+ #include <bits/stdc++.h>
+ 
+ using namespace std;
+ class LinkedListNode{
+ public:
+ int val;
+ LinkedListNode *next;
+ 
+ LinkedListNode(int node_value) {
+ val = node_value;
+ next = NULL;
+ }
+ };
+ 
+ LinkedListNode* _insert_node_into_singlylinkedlist(LinkedListNode *head, LinkedListNode *tail, int val){
+ if(head == NULL) {
+ head = new LinkedListNode(val);
+ tail = head;
+ }
+ else {
+ LinkedListNode *node = new LinkedListNode(val);
+ tail->next = node;
+ tail = tail->next;
+ }
+ return tail;
+ }
+ */
+#include <unordered_map>
+class TrieNode
+{
+    friend class Trie;
+public:
+    TrieNode():m_bLeaf(false)
+    {}
+    
+private:
+    unordered_map<wchar_t,TrieNode*> m_Next;
+    bool m_bLeaf;
+};
+using StrIter = const wstring::const_iterator;
+class Trie
+{
+public:
+    Trie():m_root(nullptr)
+    {
+    }
+    void Insert(TrieNode* root,StrIter begin, StrIter end )
+    {
+        if(begin == end)
+            return;
+        
+        if(!root)
+        {
+            root = new TrieNode{};
+        }
+        
+        if(!root->m_Next[*begin])
+        {
+            root->m_Next[*begin] = new TrieNode{};
+            
+            if(next(begin) == end)
+            {
+                root->m_Next[*begin]->m_bLeaf = true;
+                return;
+            }
+        }
+        Insert(root->m_Next[*begin], next(begin), end);
+        
+    }
+    void LongestPrefix(StrIter begin, StrIter end, wstring& result )
+    {
+        if(begin == end)
+            return;
+        
+        if(m_root->m_Next[*begin] && m_root->m_Next.size() ==1)
+        {
+            result.push_back(*begin);
+            LongestPrefix(next(begin), end, result);
+        }
+    }
+    wstring LongestPrefix(const wstring& input)
+    {
+        wstring result;
+        LongestPrefix(input.cbegin(),input.cend(), result);
+        return result;
+    }
+    
+    void Insert(const wstring& input)
+    {
+        if(!m_root)
+            m_root = new TrieNode{};
+        Insert(m_root,input.cbegin(),input. cend());
+    }
+private:
+    TrieNode* m_root;
+};

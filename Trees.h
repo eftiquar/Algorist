@@ -30,14 +30,21 @@ TRNode<T>::TRNode(T data):m_data(data)
 {
     
 }
+
 template <typename T, typename TIter>
 TRNode<T>* BuildTreebalanced(TIter begin,TIter end)
 {
-    
     if(begin == end)
+    {
         return nullptr;
+    }
     
     auto mid = begin + (end- begin) /2;
+    for(auto next = mid +1;(next != end) && (*next == *mid); ++next)
+    {
+        mid = next;
+    }
+
     TRNode<T>* root = new TRNode<T>(*mid);
     root->m_Left = BuildTreebalanced<T>(begin,mid);
     root->m_Right = BuildTreebalanced<T>(mid+1, end);
